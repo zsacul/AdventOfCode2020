@@ -1,4 +1,5 @@
-pub fn solve(data:&Vec<String>)
+#[allow(unused)]
+pub fn solve(data:&Vec<&str>)->(i32,i32)
 {
     let mut part1 = 0;
     let mut part2 = 0;
@@ -23,4 +24,26 @@ pub fn solve(data:&Vec<String>)
         println!("Day2");
         println!("part1:{}",part1);
         println!("part2:{}",part2);
+
+        (part1,part2)
+}
+
+
+#[test]
+fn test1()
+{
+    let v = vec!["1-3 a: abcde",
+                          "1-3 b: cdefg",
+                          "2-9 c: ccccccccc"];
+    assert_eq!(solve(&v).0,2);
+
+}
+
+#[test]
+fn test2()
+{
+    let v = vec!["1-3 a: abcde",
+                          "1-3 b: cdefg",
+                          "2-9 c: ccccccccc"];
+    assert_eq!(solve(&v).1,1);
 }

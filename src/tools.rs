@@ -3,6 +3,7 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 //pub fn read_1d<T: FromStr + Num>(path:String)->Vec<T>
+#[allow(unused)]
 pub fn read_1d_i32(path:&str)->Vec<i32>
 {
     let mut res:Vec<i32> = vec![];
@@ -16,6 +17,7 @@ pub fn read_1d_i32(path:&str)->Vec<i32>
     res
 }
 
+#[allow(unused)]
 pub fn read_1d_string(path:&str)->Vec<String>
 {
     let mut res:Vec<String> = vec![];

@@ -26,6 +26,7 @@ pub fn part2(data:&Vec<i32>)->i32
     -1
 }
 
+#[allow(unused)]
 pub fn solve(data:&Vec<i32>)
 {    
     println!("Day1");

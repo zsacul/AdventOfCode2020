@@ -1,11 +1,11 @@
-
 mod day01;
 mod day02;
 mod day03;
+mod day04;
 mod tools;
 
 fn main() {
-
+/*
     let day1_data    = tools::read_1d_i32("data/day01.txt");
     day01::solve(&day1_data);
 
@@ -14,6 +14,9 @@ fn main() {
 
     let day3_data  = tools::read_1d_string("data/day03.txt");
     day03::solve(&day3_data);
+*/
+    let day4_data  = tools::read_1d_string("data/day04.txt");
+    day04::solve(&day4_data);
 
 // todo generic reader table_1d<T> table_2d<T>
 }

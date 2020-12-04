@@ -30,6 +30,7 @@ pub fn part2(data:&Vec<String>)->i64
     cnt1*cnt2*cnt3*cnt4*cnt5
 }
 
+#[allow(unused)]
 pub fn solve(data:&Vec<String>)
 {
     println!("Day3");
