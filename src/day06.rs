@@ -40,7 +40,7 @@ pub fn solve(data:&Vec<String>)->(usize,usize)
         res.1+=c.1;
     }
 
-    println!("Day5");
+    println!("Day6");
     println!("part1:{}",res.0);
     println!("part2:{}",res.1);    
     
