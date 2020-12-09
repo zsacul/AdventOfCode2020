@@ -7,6 +7,7 @@ mod day05;
 mod day06;
 mod day07;
 mod day08;
+mod day09;
 
 fn main() {
 /*
@@ -30,10 +31,13 @@ fn main() {
 
     let day7_data  = tools::read_1d_string("data/day07.txt");
     day07::solve(&day7_data);
-*/    
 
     let day8_data  = tools::read_1d_string("data/day08.txt");
     day08::solve(&day8_data);
+*/    
+
+    let day9_data  = tools::read_1d_i64("data/day09.txt");
+    day09::solve(&day9_data,25);
 
 // todo generic reader table_1d<T> table_2d<T>
 }
