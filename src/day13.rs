@@ -65,7 +65,7 @@ pub fn solve(data:&Vec<String>)->(i32,i128)
     let mut time = data[0].parse::<i32>().unwrap();
 
     let buses1:Vec<_> = data[1].split(",").filter(|&c| c!="x").map(|x|x.parse().unwrap()).collect();
-    let buses2:Vec<_> = data[1].split(",").map(|x| if x=="x" {-1} else  {x.parse().unwrap()}).collect();
+    let buses2:Vec<_> = data[1].split(",").map(|x| if x=="x" {-1} else {x.parse().unwrap()}).collect();
 
     res.0 = solve1(&buses1,time);
     res.1 = solve2(&buses2);  
