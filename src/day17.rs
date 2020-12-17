@@ -100,9 +100,10 @@ pub fn solve1(data:&Vec<String>)->i32
     for _ in 0..6
     {
         simulate3d(&next.clone(),&mut next);        
+        next = next.into_iter().filter(|x| x.1==true).collect();
     }    
 
-    next.into_iter().filter(|x| x.1==true ).count() as i32    
+    next.len() as i32
 }
 
 pub fn solve2(data:&Vec<String>)->i32
@@ -117,10 +118,11 @@ pub fn solve2(data:&Vec<String>)->i32
 
     for _ in 0..6
     {
-        simulate4d(&next.clone(),&mut next);        
+        simulate4d(&next.clone(),&mut next);    
+        next = next.into_iter().filter(|x| x.1==true).collect();
     }
 
-    next.into_iter().filter(|x| x.1==true ).count() as i32    
+    next.len() as i32 
 }
 
 #[allow(unused)]
