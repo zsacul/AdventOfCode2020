@@ -73,7 +73,7 @@ pub fn solve(data:&Vec<String>)->(i32,i32)
     let res = (solve1(&tab,2020),
                          solve1(&tab,30000000));
 
-    println!("Day14");
+    println!("Day15");
     println!("part1:{}",res.0);
     println!("part2:{}",res.1);    
     
