@@ -20,6 +20,7 @@ mod day18;
 mod day19;
 mod day20;
 mod day21;
+mod day22;
 
 fn main() {
 /*
@@ -77,14 +78,15 @@ fn main() {
     let day18_data  = tools::read_1d_string("data/day18.txt");
     day18::solve(&day18_data);
 
-    let day19_data1  = tools::read_1d_string("data/day19.txt");
-    let day19_data2  = tools::read_1d_string("data/day19_2.txt");
-    day19::solve(&day19_data1,&day19_data2);
+    let day19_data  = tools::read_1d_string("data/day19.txt");
+    day19::solve(&day19_data);
 
     let day20_data  = tools::read_1d_string("data/day20.txt");
     day20::solve(&day20_data);
-*/    
 
     let day21_data  = tools::read_1d_string("data/day21.txt");
     day21::solve(&day21_data);
+*/        
+    let day22_data  = tools::read_1d_string("data/day22.txt");
+    day22::solve(&day22_data);
 }

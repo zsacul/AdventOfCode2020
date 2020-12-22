@@ -30,25 +30,22 @@ impl Rule
         } 
           else 
         {
-           
-            {
-                let ss : Vec<_> = s.split(" | ").collect();
-                let ss1 : Vec<_> = ss[0].split(" ").collect();
-                
-                //println!("ss:{:?}",ss);
-                if ss1.len()>=1 { a1 = ss1[0].to_string().parse::<i32>().unwrap(); }
-                if ss1.len()>=2 { b1 = ss1[1].to_string().parse::<i32>().unwrap(); }
-                if ss1.len()>=3 { c1 = ss1[2].to_string().parse::<i32>().unwrap(); }
-                if ss1.len()>3 {panic!("tm {} \n{:?}",s,ss)};
+            let ss : Vec<_> = s.split(" | ").collect();
+            let ss1 : Vec<_> = ss[0].split(" ").collect();
+            
+            //println!("ss:{:?}",ss);
+            if ss1.len()>=1 { a1 = ss1[0].to_string().parse::<i32>().unwrap(); }
+            if ss1.len()>=2 { b1 = ss1[1].to_string().parse::<i32>().unwrap(); }
+            if ss1.len()>=3 { c1 = ss1[2].to_string().parse::<i32>().unwrap(); }
+            if ss1.len()>3 {panic!("tm {} \n{:?}",s,ss)};
 
-                if ss.len()>1
-                {
-                    let ss2 : Vec<_> = ss[1].split(" ").collect();
-                    if ss2.len()>=1 { a2 = ss2[0].to_string().parse::<i32>().unwrap(); }
-                    if ss2.len()>=2 { b2 = ss2[1].to_string().parse::<i32>().unwrap(); }
-                    if ss2.len()>=3 { c2 = ss2[2].to_string().parse::<i32>().unwrap(); }
-                    if ss2.len()>3 {panic!("tm {} \n{:?}",s,ss)};
-                }
+            if ss.len()>1
+            {
+                let ss2 : Vec<_> = ss[1].split(" ").collect();
+                if ss2.len()>=1 { a2 = ss2[0].to_string().parse::<i32>().unwrap(); }
+                if ss2.len()>=2 { b2 = ss2[1].to_string().parse::<i32>().unwrap(); }
+                if ss2.len()>=3 { c2 = ss2[2].to_string().parse::<i32>().unwrap(); }
+                if ss2.len()>3 {panic!("tm {} \n{:?}",s,ss)};
             }
         }
 
@@ -57,6 +54,7 @@ impl Rule
         }
     }
 
+    #[allow(unused)]
     fn print(&self)
     {
         println!("l:{:?} a1:{} b1:{} c1:{} a2:{} b2:{} c2:{}",self.ch,self.a1,self.b1,self.c1,self.a2,self.b2,self.c2);
@@ -64,7 +62,7 @@ impl Rule
 
     fn match_string(&self,hash:&HashMap<i32,Rule>,s:&String,i:usize)->(bool,usize)
     {
-        print!("{},",self.id);
+        //print!("{},",self.id);
 
         if self.ch!=None {
             
@@ -89,7 +87,7 @@ impl Rule
                 { 
                     return m1; 
                 }
-                //if m1.1>=s.len() { return (false,i); }
+                if m1.1>=s.len() { return (false,i); }
               
                 let m2 = hash.get(&self.b1).unwrap().match_string(hash, s, m1.1);
                 if m2.0==true { 
@@ -119,7 +117,7 @@ impl Rule
                 if self.b2==-1 { 
                     return m1; 
                 }
-                //if m1.1>=s.len() { return (false,i); }
+                if m1.1>=s.len() { return (false,i); }
               
                 let m2 = hash.get(&self.b2).unwrap().match_string(hash, s, m1.1);
                 if m2.0==true { 
@@ -142,7 +140,7 @@ impl Rule
     }
 }
 
-pub fn solve1(data:&Vec<String>)->i64
+pub fn solve12(data:&Vec<String>,part1:bool)->i64
 {
     let mut res = 0;
     let mut rules = true;
@@ -153,6 +151,11 @@ pub fn solve1(data:&Vec<String>)->i64
         if l.len()==0
         {
             rules = false;
+
+            if !part1 {
+                hash.insert(8,Rule::new("42 | 42 8".to_string(),8));
+                hash.insert(11,Rule::new("42 31 | 42 11 31".to_string(),11));
+            }           
         }
         else
         {
@@ -160,9 +163,7 @@ pub fn solve1(data:&Vec<String>)->i64
                 if l.find(":")!=None {
                     let v:Vec<_> = l.split(": ").collect();
                     let id:i32 = v[0].parse().unwrap();
-                    //println!("line:{}",l.clone());
                     hash.insert(id,Rule::new(v[1].to_string(),id));
-                    hash.get(&id).unwrap().print();
                 }
             }
               else
@@ -171,22 +172,21 @@ pub fn solve1(data:&Vec<String>)->i64
                 
                 if hash.get(&0).unwrap().match_string(&hash,&ll,0)==(true,ll.len())
                 {
-                    //println!("{}",l);                      
                     res+=1;
                 }
             }
         }
 
     }
-   // print!("{:?}",hash);
+
     res
 }
 
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>,data2:&Vec<String>)->(i64,i64)
+pub fn solve(data:&Vec<String>)->(i64,i64)
 {
-    let res = (solve1(data),solve1(data2));
+    let res = (solve12(data,true),solve12(data,false));
 
     println!("Day19");
     println!("part1:{}",res.0);
@@ -212,7 +212,7 @@ fn test1()
                             "abbbab".to_string(),
                             "aaabbb".to_string(),
                             "aaaabbb".to_string()];
-    assert_eq!(solve1(&v),2);
+    assert_eq!(solve12(&v,true),2);
 }
 
 #[test]
@@ -227,7 +227,7 @@ fn test2()
                             "6: 1 5".to_string(),
                             "".to_string(),
                             "aaabbb".to_string()];
-                            assert_eq!(solve1(&v),1);
+                            assert_eq!(solve12(&v,true),0);
 }
 
 
@@ -283,7 +283,7 @@ fn test3()
                             "babaaabbbaaabaababbaabababaaab".to_string(),
                             "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba".to_string()
                             ];
-                            assert_eq!(solve1(&v),3);
+                            assert_eq!(solve12(&v,true),3);
 }
 
 
@@ -295,8 +295,7 @@ fn test4()
                             "9: 14 27 | 1 26".to_string(),
                             "10: 23 14 | 28 1".to_string(),
                             "1: \"a\"".to_string(),
-                            "11: 42 31 | 42 999".to_string(),
-                            "999: 11 31".to_string(),
+                            "11: 42 31 | 42 11 31".to_string(),
                             "5: 1 14 | 15 1".to_string(),
                             "19: 14 1 | 14 14".to_string(),
                             "12: 24 14 | 19 1".to_string(),
@@ -340,7 +339,7 @@ fn test4()
                             "babaaabbbaaabaababbaabababaaab".to_string(),
                             "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba".to_string(),
                             ];
-                            assert_eq!(solve1(&v),12);
+                            assert_eq!(solve12(&v,false),12);
 }
 
 
@@ -382,49 +381,6 @@ fn test5()
                             "".to_string(),
                             "aaaabbaaaabbaaa".to_string(),
                             ];
-                            assert_eq!(solve1(&v),0);
+                            assert_eq!(solve12(&v,false),0);
 }
 
-//45
-//52
-//1
-//>197 part2
-//< 291
-// !=280
-/*
--aaaabbaaaabbaaa
-
-+bbabbbbaabaabba
--bbabbbbaabaabba
-+babbbbaabbbbbabbbbbbaabaaabaaa
--babbbbaabbbbbabbbbbbaabaaabaaa
-+aaabbbbbbaaaabaababaabababbabaaabbababababaaa
--aaabbbbbbaaaabaababaabababbabaaabbababababaaa
-+bbbbbbbaaaabbbbaaabbabaaa
--bbbbbbbaaaabbbbaaabbabaaa
-+bbbababbbbaaaaaaaabbababaaababaabab
--bbbababbbbaaaaaaaabbababaaababaabab
-+ababaaaaaabaaab
--ababaaaaaabaaab
-+ababaaaaabbbaba
--ababaaaaabbbaba
-+baabbaaaabbaaaababbaababb
--baabbaaaabbaaaababbaababb
-+abbbbabbbbaaaababbbbbbaaaababb
--abbbbabbbbaaaababbbbbbaaaababb
-+aaaaabbaabaaaaababaa
--aaaaabbaabaaaaababaa
-+aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
--aaaabbaabbaaaaaaabbbabbbaaabbaabaaa
-+aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
--aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba
-
-
-+bbabbbbaabaabba 
--bbabbbbaabaabba
-+ababaaaaaabaaab
--ababaaaaaabaaab
-+ababaaaaabbbaba
--ababaaaaabbbaba
-
-*/
