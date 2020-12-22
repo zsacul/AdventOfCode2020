@@ -27,7 +27,7 @@ fn eval_pure(l:&String)->i64
                                 '-'=> { acc-=num; num=0; },
                                 '*'=> { acc*=num; num=0; },
                                 '/'=> { acc/=num; num=0; },
-                                _  => { panic!("wrong operator")},
+                                _  => { panic!("wrong operator") },
                             }
                             operator = None;
                         }
@@ -59,14 +59,14 @@ fn eval(l:&String,part1:bool)->i64
 {
     let mut line = (*l).clone();
 
-    //eval and replace all equations in barackets first
+    //eval and replace all equations in brackets first
     while line.find("(")!=None
     {
         let bracket_start = line.find('(').unwrap();
         let mut bracket_end = 0;
-        let mut opened_brackets=1;
+        let mut opened_brackets = 1;
 
-        //find matching baracket
+        //find matching bracket
         for i in bracket_start+1..line.len() {
             let c = line.chars().nth(i).unwrap();
             if c=='(' {

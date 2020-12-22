@@ -17,6 +17,9 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
+mod day19;
+mod day20;
+mod day21;
 
 fn main() {
 /*
@@ -70,9 +73,18 @@ fn main() {
 
     let day17_data  = tools::read_1d_string("data/day17.txt");
     day17::solve(&day17_data);
-*/
+
     let day18_data  = tools::read_1d_string("data/day18.txt");
     day18::solve(&day18_data);
 
-// todo generic reader table_1d<T> table_2d<T>
+    let day19_data1  = tools::read_1d_string("data/day19.txt");
+    let day19_data2  = tools::read_1d_string("data/day19_2.txt");
+    day19::solve(&day19_data1,&day19_data2);
+
+    let day20_data  = tools::read_1d_string("data/day20.txt");
+    day20::solve(&day20_data);
+*/    
+
+    let day21_data  = tools::read_1d_string("data/day21.txt");
+    day21::solve(&day21_data);
 }
