@@ -221,6 +221,7 @@ fn test2()
 }
 
 #[test]
+#[ignore = "too slow"]
 fn test3()
 {
     let v = vec!["389125467".to_string()];

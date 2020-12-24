@@ -129,7 +129,7 @@ fn test1()
         "7".to_string(),
         "10".to_string(),
     ];
-    assert_eq!(solve(&v).0,71);
+    assert_eq!(solve(&v).0,306);
 }
 
 #[test]

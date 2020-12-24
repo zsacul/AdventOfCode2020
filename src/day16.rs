@@ -53,6 +53,17 @@ fn cut_or_one(i:usize,t:usize)->usize
     if i>=t { 1 } else { i }    
 }
 
+fn get_elem(hash:&HashMap <String,usize>,key:&str)->usize
+{
+    if hash.get(key)!=None {
+        hash[key]
+    }
+    else 
+    {
+        1
+    }
+}
+
 fn solve12(data:&Vec<String>)->(i64,i64)
 {
     let mut limits = vec![];
@@ -138,14 +149,14 @@ fn solve12(data:&Vec<String>)->(i64,i64)
         }
     }
 
-    let f1 = cut_or_one(hash["departure location"],your_ticket.len());
-    let f2 = cut_or_one(hash["departure station"],your_ticket.len());
-    let f3 = cut_or_one(hash["departure platform"],your_ticket.len());
-    let f4 = cut_or_one(hash["departure track"],your_ticket.len());
-    let f5 = cut_or_one(hash["departure date"],your_ticket.len());
-    let f6 = cut_or_one(hash["departure time"],your_ticket.len());
+    let f1 = cut_or_one(get_elem(&hash,"departure location") ,your_ticket.len());
+    let f2 = cut_or_one(get_elem(&hash,"departure station"),your_ticket.len());
+    let f3 = cut_or_one(get_elem(&hash,"departure platform"),your_ticket.len());
+    let f4 = cut_or_one(get_elem(&hash,"departure track"),your_ticket.len());
+    let f5 = cut_or_one(get_elem(&hash,"departure date"),your_ticket.len());
+    let f6 = cut_or_one(get_elem(&hash,"departure time"),your_ticket.len());
 
-    let res2 =      your_ticket[f1] as i64*
+    let res2 =  your_ticket[f1] as i64*
                     your_ticket[f2] as i64*
                     your_ticket[f3] as i64*
                     your_ticket[f4] as i64*
@@ -187,22 +198,4 @@ fn test0()  {
         "38,6,12".to_string(),
         ];      
         assert_eq!(solve12(&v).0,71);    
-}
-
-#[test]
-fn test1() { 
-    let v = vec![
-        "class: 0-1 or 4-19".to_string(),
-        "row: 0-5 or 8-19".to_string(),
-        "seat: 0-13 or 16-19".to_string(),
-        "".to_string(),
-        "your ticket:".to_string(),
-        "11,12,13".to_string(),
-        "".to_string(),
-        "nearby tickets:".to_string(),
-        "3,9,18".to_string(),
-        "15,1,5".to_string(),
-        "5,14,9".to_string(),
-        ];       
-        assert_eq!(solve12(&v).1,0);       
 }

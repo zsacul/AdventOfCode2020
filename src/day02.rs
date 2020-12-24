@@ -1,5 +1,5 @@
 #[allow(unused)]
-pub fn solve(data:&Vec<&str>)->(i32,i32)
+pub fn solve(data:&Vec<String>)->(i32,i32)
 {
     let mut part1 = 0;
     let mut part2 = 0;
@@ -32,9 +32,9 @@ pub fn solve(data:&Vec<&str>)->(i32,i32)
 #[test]
 fn test1()
 {
-    let v = vec!["1-3 a: abcde",
-                          "1-3 b: cdefg",
-                          "2-9 c: ccccccccc"];
+    let v = vec!["1-3 a: abcde".to_string(),
+                           "1-3 b: cdefg".to_string(),
+                           "2-9 c: ccccccccc".to_string()];
     assert_eq!(solve(&v).0,2);
 
 }
@@ -42,8 +42,8 @@ fn test1()
 #[test]
 fn test2()
 {
-    let v = vec!["1-3 a: abcde",
-                          "1-3 b: cdefg",
-                          "2-9 c: ccccccccc"];
+    let v = vec!["1-3 a: abcde".to_string(),
+                           "1-3 b: cdefg".to_string(),
+                           "2-9 c: ccccccccc".to_string()];
     assert_eq!(solve(&v).1,1);
 }
