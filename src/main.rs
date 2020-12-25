@@ -23,9 +23,10 @@ mod day21;
 mod day22;
 mod day23;
 mod day24;
+mod day25;
 
 fn main() {
-
+/*
     let day1_data    = tools::read_1d_i32("data/day01.txt");
     day01::solve(&day1_data);
 
@@ -94,7 +95,7 @@ fn main() {
 
    // let day23_data  = tools::read_1d_string("data/day23.txt");
     //day23::solve(&day23_data);       
-
-    let day24_data  = tools::read_1d_string("data/day24.txt");
-    day24::solve(&day24_data);
+ */
+    let day25_data  = tools::read_1d_string("data/day25.txt");
+    day25::solve(&day25_data);
 }
