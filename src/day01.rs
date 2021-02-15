@@ -30,8 +30,8 @@ pub fn part2(data:&Vec<i32>)->i32
 pub fn solve(data:&Vec<i32>)
 {    
     println!("Day1");
-    println!("{}",part1(data));
-    println!("{}",part2(data));
+    println!("part1:{}",part1(data));
+    println!("part2:{}",part2(data));
 }
 
 #[test]

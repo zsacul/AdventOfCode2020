@@ -1,204 +1,135 @@
-use std::fmt::Debug;
-
-fn find_id(tab:&Vec<u8>,val:u8)->usize
-{
-    for (id,&label) in tab.iter().enumerate() {
-        if val==label { return id; }
-    }
-    0
-}
-
-fn print_info<T:Debug>(m:usize,table:&Vec<T>,current:usize)
-{
-    println!("-- move {} --",m);
-    println!("cups: ");
-
-    for (i,v) in table.iter().enumerate() {
-        if i==current { print!("({:?}) ",v); }
-                 else { print!("{:?} ",v);   }
-    }
-    println!("");
-
-}
+use super::cycliclist::{CyclicList};
+use std::io::{self, Write};
 
 pub fn solve1(data:&Vec<String>,moves:usize)->String
 {
-    let mut table = vec![];
-    let mut current = 0;
+    let mut table = CyclicList::new();
+    let mut max_label = 0;
 
     for c in data[0].chars() {
-        table.push(c as u8-b'0');
+        let v = (c as u8-b'0') as i32;
+        table.push_right(v);
+        if v>max_label {
+            max_label = v;
+        }
     }
-    let max_label = *table.iter().max().unwrap();
-    let n = table.len();
-
+    table.right();
     const SHOW_DEBUG : bool = false;
 
-    for m in 1..=moves {
+    for _m in 1..=moves {
 
         if SHOW_DEBUG 
         {
-            print_info::<u8>(m,&table,current);
+            table.print();
         }
         
-        let curr_val = table[current];
-        let pic = vec![(current+1)%n,(current+2)%n,(current+3)%n];
-        let picked = vec![table[pic[0]],table[pic[1]],table[pic[2]]];
-
-
-        if SHOW_DEBUG
-        {
-            println!("pick up: {}, {}, {}",picked[0],picked[1],picked[2]);
-        }
-
-        let mut rem = pic.clone();
-        rem.sort();
+        let curr_val = table.peek().unwrap();
+        table.right();
+        let p1 = table.pop().unwrap(); table.right();
+        let p2 = table.pop().unwrap(); table.right();
+        let p3 = table.pop().unwrap(); table.right();
 
         let mut dest_v = curr_val-1;
         if dest_v<1 { dest_v = max_label; }
 
-        while picked.contains(&dest_v)
+        while dest_v==p1 || dest_v==p2 || dest_v==p3
         {
             dest_v-=1;
             if dest_v<1 { dest_v = max_label; }
-        }
-        table.remove(rem[2]);
-        table.remove(rem[1]);
-        table.remove(rem[0]);
-        
-        
-        let dest = find_id(&table,dest_v);
+        }      
 
-        if SHOW_DEBUG
-        {
-            println!("destination: {}->{}",dest_v,dest);
-        }        
+        table.move_right_till_value(dest_v);
+        
+        table.push_right(p1);
+        table.push_right(p2);
+        table.push_right(p3);
 
-        let nn = table.len()+1;
-        table.insert((dest+1)%nn, picked[2]);
-        table.insert((dest+1)%nn, picked[1]);
-        table.insert((dest+1)%nn, picked[0]);
-      
-        current = find_id(&table,curr_val);
-        current = (current+1)%n;
+        table.move_right_till_value(curr_val);
+        table.right();
     }
-
-    let mut pos = find_id(&table,1);
+    
     let mut res ="".to_string();
-    
-    pos= (pos+1)%n;
-    
-    while table[pos]!=1 
+
+    table.move_right_till_value(1);
+    table.right();
+     
+    while table.peek().unwrap()!=1 
     {      
-        res.push_str(&table[pos].to_string()[..]);
-        pos = (pos+1)%n;
+        res.push_str(&table.peek().unwrap().to_string()[..]);
+        table.right();
     }
 
     res
 }
 
-fn find_idb(tab:&Vec<i32>,val:i32)->usize
-{
-    for (id,&label) in tab.iter().enumerate() {
-        if val==label { return id; }
-    }
-    0
-}
-
 
 pub fn solve2(data:&Vec<String>,moves:usize)->i64
 {
-    let mut table = vec![];
-    let mut current = 0;
+    let mut table = CyclicList::new();
+    let mut max_label = 0;
 
     for c in data[0].chars() {
-        table.push(c as i32-b'0' as i32);
+        let v = (c as u8-b'0') as i32;
+        table.push_right(v);
+        if v>max_label {
+            max_label = v;
+        }
     }
-    let mut mmm = *table.iter().max().unwrap();
 
     while table.len()<1000000
     {
-        mmm+=1;
-        table.push(mmm);    
+        max_label+=1;
+        table.push_right(max_label);    
     }    
-
-    let  max_label = *table.iter().max().unwrap();
-    let n = table.len();
-
-    const SHOW_DEBUG:bool = false;
+    table.right();
 
     for m in 1..=moves {
 
-        if m%10000 ==0 
+        if m%100_000==0 
         {
-            println!("{}..{}%",m,(m*100)/moves)
-        }
-
-        if SHOW_DEBUG
-        {
-            print_info::<i32>(m,&table,current);
+            print!("{}..{}%\r",m,(m*100)/moves);            
+            io::stdout().flush().unwrap();
         }
         
-        let curr_val = table[current];
-        let pic = vec![(current+1)%n,(current+2)%n,(current+3)%n];
-        let picked = vec![table[pic[0]],table[pic[1]],table[pic[2]]];
-
-        if SHOW_DEBUG
-        {
-            println!("pick up: {}, {}, {}",picked[0],picked[1],picked[2]);
-        }
-
-        let mut rem = pic.clone();
-        rem.sort();
+        let curr_val = table.peek().unwrap();
+                                           table.right();
+        let p1 = table.pop().unwrap(); table.right();
+        let p2 = table.pop().unwrap(); table.right();
+        let p3 = table.pop().unwrap(); table.right();
 
         let mut dest_v = curr_val-1;
         if dest_v<1 { dest_v = max_label; }
 
-        while picked.contains(&dest_v)
+        while dest_v==p1 || dest_v==p2 || dest_v==p3
         {
             dest_v-=1;
             if dest_v<1 { dest_v = max_label; }
         }
-        table.remove(rem[2]);
-        table.remove(rem[1]);
-        table.remove(rem[0]);
-        
-        
-        let dest = find_idb(&table,dest_v);
 
-        if SHOW_DEBUG
-        {
-            println!("destination: {}->{}",dest_v,dest);
-        }        
+        table.move_left_till_value(dest_v);
 
-        let nn = table.len()+1;
-        table.insert((dest+1)%nn, picked[2]);
-        table.insert((dest+1)%nn, picked[1]);
-        table.insert((dest+1)%nn, picked[0]);
-      
-        if curr_val!=table[current] { current = find_idb(&table,curr_val); }
-        current = (current+1)%n;
+        table.push_right(p1);
+        table.push_right(p2);
+        table.push_right(p3);
+
+        table.move_right_till_value(curr_val);
+        table.right();
     }
 
-    let pos = find_idb(&table,1);
-    let pos1 = (pos+1)%n;
-    let pos2 = (pos+2)%n;
-    
-    //println!("res1={}",table[pos1]);
-    //println!("res2={}",table[pos2]);
-    //println!("res={}",(table[pos1] as i64)*(table[pos2] as i64));
-    //res1=385778
-    //res2=931123
+    table.move_right_till_value(1);
+    table.right();
+    let pos1 = table.peek().unwrap() as i64;
+    table.right();
+    let pos2 = table.peek().unwrap() as i64;
 
-    (table[pos1] as i64)*(table[pos2] as i64)
+    pos1*pos2
 }
 
-#[allow(unused)]
 pub fn solve(data:&Vec<String>)->(String,i64)
 {
     let res = (solve1(data,100),solve2(data,10_000_000));
 
-    println!("Day23");
+    println!("Day23            ");
     println!("part1:{}",res.0);
     println!("part2:{}",res.1);    
     
@@ -220,8 +151,8 @@ fn test2()
     assert_eq!(solve1(&v,100),"67384529");
 }
 
+//#[ignore = "too slow"]
 #[test]
-#[ignore = "too slow"]
 fn test3()
 {
     let v = vec!["389125467".to_string()];

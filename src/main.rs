@@ -1,4 +1,7 @@
+use timer::Timer;
 mod tools;
+mod cycliclist;
+mod timer;
 mod day01;
 mod day02;
 mod day03;
@@ -25,77 +28,157 @@ mod day23;
 mod day24;
 mod day25;
 
+
 fn main() {
-/*
-    let day1_data    = tools::read_1d_i32("data/day01.txt");
-    day01::solve(&day1_data);
 
-    let day2_data  = tools::read_1d_string("data/day02.txt");
-    day02::solve(&day2_data);
+    {
+        let _timer = Timer::new();
+        let day1_data    = tools::read_1d_i32("data/day01.txt");
+        day01::solve(&day1_data);
+    }
 
-    let day3_data  = tools::read_1d_string("data/day03.txt");
-    day03::solve(&day3_data);
+    {
+        let _timer = Timer::new();
+        let day2_data  = tools::read_1d_string("data/day02.txt");
+        day02::solve(&day2_data);
+    }
 
-    let day4_data  = tools::read_1d_string("data/day04.txt");
-    day04::solve(&day4_data);
-    
-    let day5_data  = tools::read_1d_string("data/day05.txt");
-    day05::solve(&day5_data);
-    
-    let day6_data  = tools::read_1d_string("data/day06.txt");
-    day06::solve(&day6_data);
+    {
+        let _timer = Timer::new();
+        let day3_data  = tools::read_1d_string("data/day03.txt");
+        day03::solve(&day3_data);
+    }
 
-    let day7_data  = tools::read_1d_string("data/day07.txt");
-    day07::solve(&day7_data);
+    {
+        let _timer = Timer::new();
+        let day4_data  = tools::read_1d_string("data/day04.txt");
+        day04::solve(&day4_data);
+    }
 
-    let day8_data  = tools::read_1d_string("data/day08.txt");
-    day08::solve(&day8_data);
+    {
+        let _timer = Timer::new();
+        let day5_data  = tools::read_1d_string("data/day05.txt");
+        day05::solve(&day5_data);
+    }
 
-    let day9_data  = tools::read_1d_i64("data/day09.txt");
-    day09::solve(&day9_data,25);
+    {
+        let _timer = Timer::new();
+        let day6_data  = tools::read_1d_string("data/day06.txt");
+        day06::solve(&day6_data);
+    }
 
-    let day10_data  = tools::read_1d_i32("data/day10.txt");
-    day10::solve(&day10_data);
+    {
+        let _timer = Timer::new();
+        let day7_data  = tools::read_1d_string("data/day07.txt");
+        day07::solve(&day7_data);
+    }
 
-    let day11_data  = tools::read_1d_string("data/day11.txt");
-    day11::solve(&day11_data);
+    {
+        let _timer = Timer::new();
+        let day8_data  = tools::read_1d_string("data/day08.txt");
+        day08::solve(&day8_data);
+    }
 
-    let day12_data  = tools::read_1d_string("data/day12.txt");
-    day12::solve(&day12_data);
+    {
+        let _timer = Timer::new();
+        let day9_data  = tools::read_1d_i64("data/day09.txt");
+        day09::solve(&day9_data,25);
+    }
 
-    let day13_data  = tools::read_1d_string("data/day13.txt");
-    day13::solve(&day13_data);
+    {
+        let _timer = Timer::new();
+        let day10_data  = tools::read_1d_i32("data/day10.txt");
+        day10::solve(&day10_data);
+    }
 
-    let day14_data  = tools::read_1d_string("data/day14.txt");
-    day14::solve(&day14_data);
+    {
+        let _timer = Timer::new();
+        let day11_data  = tools::read_1d_string("data/day11.txt");
+        day11::solve(&day11_data);
+    }
 
-    let day15_data  = tools::read_1d_string("data/day15.txt");
-    day15::solve(&day15_data);
+    {
+        let _timer = Timer::new();
+        let day12_data  = tools::read_1d_string("data/day12.txt");
+        day12::solve(&day12_data);
+    }
 
-    let day16_data  = tools::read_1d_string("data/day16.txt");
-    day16::solve(&day16_data); 
+    {
+        let _timer = Timer::new();
+        let day13_data  = tools::read_1d_string("data/day13.txt");
+        day13::solve(&day13_data);
+    }
 
-    let day17_data  = tools::read_1d_string("data/day17.txt");
-    day17::solve(&day17_data);
+    {
+        let _timer = Timer::new();
+        let day14_data  = tools::read_1d_string("data/day14.txt");
+        day14::solve(&day14_data);
+    }
 
-    let day18_data  = tools::read_1d_string("data/day18.txt");
-    day18::solve(&day18_data);
+    {
+        let _timer = Timer::new();
+        let day15_data  = tools::read_1d_string("data/day15.txt");
+        day15::solve(&day15_data);
+    }
 
-    let day19_data  = tools::read_1d_string("data/day19.txt");
-    day19::solve(&day19_data);
+    {
+        let _timer = Timer::new();
+        let day16_data  = tools::read_1d_string("data/day16.txt");
+        day16::solve(&day16_data); 
+    }
 
-    let day20_data  = tools::read_1d_string("data/day20.txt");
-    day20::solve(&day20_data);
+    {
+        let _timer = Timer::new();
+        let day17_data  = tools::read_1d_string("data/day17.txt");
+        day17::solve(&day17_data);
+    }
 
-    let day21_data  = tools::read_1d_string("data/day21.txt");
-    day21::solve(&day21_data);
+    {
+        let _timer = Timer::new();
+        let day18_data  = tools::read_1d_string("data/day18.txt");
+        day18::solve(&day18_data);
+    }
 
-    let day22_data  = tools::read_1d_string("data/day22.txt");
-    day22::solve(&day22_data);
+    {
+        let _timer = Timer::new();
+        let day19_data  = tools::read_1d_string("data/day19.txt");
+        day19::solve(&day19_data);
+    }
 
-   // let day23_data  = tools::read_1d_string("data/day23.txt");
-    //day23::solve(&day23_data);       
- */
-    let day25_data  = tools::read_1d_string("data/day25.txt");
-    day25::solve(&day25_data);
+    {
+        let _timer = Timer::new();
+        let day20_data  = tools::read_1d_string("data/day20.txt");
+        day20::solve(&day20_data);
+    }
+
+    {
+        let _timer = Timer::new();
+        let day21_data  = tools::read_1d_string("data/day21.txt");
+        day21::solve(&day21_data);
+    }
+
+    {
+        let _timer = Timer::new();
+        let day22_data  = tools::read_1d_string("data/day22.txt");
+        day22::solve(&day22_data);
+    }
+
+    {
+        let _timer = Timer::new();
+        let day23_data  = tools::read_1d_string("data/day23.txt");
+        day23::solve(&day23_data);       
+    }
+
+    {
+        let _timer = Timer::new();
+        let day24_data  = tools::read_1d_string("data/day24.txt");
+        day24::solve(&day24_data);       
+    }
+
+    {
+        let _timer = Timer::new();
+        let day25_data  = tools::read_1d_string("data/day25.txt");
+        day25::solve(&day25_data);
+    }
+
 }
