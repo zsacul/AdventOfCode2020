@@ -6,7 +6,7 @@ fn intersection(a: HashSet<String>, b: &HashSet<String>) -> HashSet<String>
     a.into_iter().filter(|e| b.contains(e)).collect()
 }
 
-pub fn solve12(data:&Vec<String>)->(i64,String)
+pub fn solve12(data:&[String])->(i64,String)
 {
     let mut alergens : HashMap<String,bool> = HashMap::new();
     let mut pieces   : Vec<(HashSet<String>,HashSet<String>)> = vec![];
@@ -17,7 +17,7 @@ pub fn solve12(data:&Vec<String>)->(i64,String)
         {            
             let v : Vec<_> = line.split(" (contains ").collect();
             let alerg = v[1][..v[1].len()-1].split(", ").map(|e| e.to_string() ).collect::<Vec<String>>();
-            let ingr  = v[0].split(" ").map(|e| e.to_string() ).collect::<Vec<String>>();
+            let ingr  = v[0].split(' ').map(|e| e.to_string() ).collect::<Vec<String>>();
 
             for aler in alerg.iter() {
                 alergens.insert(aler.clone(),false);
@@ -34,7 +34,7 @@ pub fn solve12(data:&Vec<String>)->(i64,String)
         found = false;
     
         for (aler,used) in alergens.iter() {
-        if *used==false
+        if !(*used)
         {
             let mut first = true;
             let mut acc_hash = HashSet::new();
@@ -48,7 +48,7 @@ pub fn solve12(data:&Vec<String>)->(i64,String)
                     }
                       else   
                     {
-                        acc_hash = intersection(acc_hash,&h_ing);
+                        acc_hash = intersection(acc_hash,h_ing);
                     }                
                 }
             }
@@ -82,7 +82,7 @@ pub fn solve12(data:&Vec<String>)->(i64,String)
 
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,String)
+pub fn solve(data:&[String])->(i64,String)
 {
     let res = solve12(data);
   

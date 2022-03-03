@@ -1,5 +1,5 @@
 
-fn solve1(buses:&Vec<i32>,time:i32)->i32
+fn solve1(buses:&[i32],time:i32)->i32
 {
     for t in time..time+1000000000 
     {
@@ -31,9 +31,9 @@ fn nww(a:i128,b:i128)->i128
     (a*b)/nwd(a,b)
 }
 
-fn solve2(buses:&Vec<i32>)->i128
+fn solve2(buses:&[i32])->i128
 {
-    let data:Vec<_> = buses.into_iter().enumerate().map(|(id,&v)| (id,v as i128)).filter(|(_,v)| *v!=-1).collect();
+    let data:Vec<_> = buses.iter().enumerate().map(|(id,&v)| (id,v as i128)).filter(|(_,v)| *v!=-1).collect();
 
     let mut time = 1;
     let mut locked = 0;
@@ -59,13 +59,13 @@ fn solve2(buses:&Vec<i32>)->i128
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i128)
+pub fn solve(data:&[String])->(i32,i128)
 {
     let mut res : (i32,i128) = (0,0);   
     let mut time = data[0].parse::<i32>().unwrap();
 
-    let buses1:Vec<_> = data[1].split(",").filter(|&c| c!="x").map(|x|x.parse().unwrap()).collect();
-    let buses2:Vec<_> = data[1].split(",").map(|x| if x=="x" {-1} else {x.parse().unwrap()}).collect();
+    let buses1:Vec<_> = data[1].split(',').filter(|&c| c!="x").map(|x|x.parse().unwrap()).collect();
+    let buses2:Vec<_> = data[1].split(',').map(|x| if x=="x" {-1} else {x.parse().unwrap()}).collect();
 
     res.0 = solve1(&buses1,time);
     res.1 = solve2(&buses2);  

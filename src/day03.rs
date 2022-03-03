@@ -1,4 +1,4 @@
-fn count_trees(data:&Vec<String>,slope_x:usize,slope_y:usize)->i64
+fn count_trees(data:&[String],slope_x:usize,slope_y:usize)->i64
 {
     let mut res = 0i64;
     let mut x = 0usize;
@@ -15,12 +15,12 @@ fn count_trees(data:&Vec<String>,slope_x:usize,slope_y:usize)->i64
     res
 }
 
-pub fn part1(data:&Vec<String>)->i64
+pub fn part1(data:&[String])->i64
 {
     count_trees(data,3,1)
 }
 
-pub fn part2(data:&Vec<String>)->i64
+pub fn part2(data:&[String])->i64
 {
     let cnt1 = count_trees(data,1,1);
     let cnt2 = count_trees(data,3,1);
@@ -31,7 +31,7 @@ pub fn part2(data:&Vec<String>)->i64
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)
+pub fn solve(data:&[String])
 {
     println!("Day3");
     println!("part1:{}",part1(data));

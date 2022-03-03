@@ -1,4 +1,4 @@
-fn cnt(d:&Vec<char>,c:char)->i32
+fn cnt(d:&[char],c:char)->i32
 {    
     d.iter().map(|&letter| if letter==c {1} else {0}).sum()
 }
@@ -75,7 +75,7 @@ fn count_seats(data:&mut Vec<Vec<char>>)->i32
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let mut res = (0,0);
     let mut prev:Vec<Vec<char>> = vec![];
@@ -102,7 +102,7 @@ pub fn solve(data:&Vec<String>)->(i32,i32)
    
     res.0 = count_seats(&mut next);
 
-    prev = org.clone();
+    prev = org;
     
     while (moving(&mut next,&mut prev,false))
     {        

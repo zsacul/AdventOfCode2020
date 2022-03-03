@@ -48,12 +48,12 @@ fn count(h:&mut HashMap<Val,i64>,data:&mut Vec<i32>,act:i32, pos:usize)->i64
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<i32>)->(i32,i64)
+pub fn solve(data:&[i32])->(i32,i64)
 {
     let mut res = (0,0);
-    let mut adap = data.clone();
+    let mut adap = data.to_owned();
 
-    adap.sort();
+    adap.sort_unstable();
     adap.push(adap[adap.len()-1]+3);
     
     res.0 = part1(&mut adap);

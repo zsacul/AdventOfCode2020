@@ -14,7 +14,7 @@ struct Tile
 
 impl Tile
 {
-    fn new(id:usize,s:&Vec<String>)->Self
+    fn new(id:usize,s:&[String])->Self
     {
         let mut t = vec![];
         for l in s {
@@ -49,7 +49,7 @@ impl Tile
             {
                 print!("{}",c);
             }
-            println!("");
+            println!();
         }
 
         println!("l:{} r:{} u:{} d:{} hash:{}",self.l,self.r,self.u,self.d,self.h);
@@ -58,11 +58,12 @@ impl Tile
     fn flip_x_s(ta:&mut Vec<Vec<char>>)
     {
         let n = ta.len();
-        for y in 0..n {
+        for item in ta.iter_mut().take(n) {
             for x in 0..n/2 {
-                let t   = ta[y][    x];
-                ta[y][    x] = ta[y][n-1-x];
-                ta[y][n-1-x] = t;
+                item.swap(x, n-1-x)
+                //let t   = ta[y][    x];
+                //ta[y][    x] = ta[y][n-1-x];
+                //ta[y][n-1-x] = t;
             }
         }
     }
@@ -101,11 +102,11 @@ impl Tile
         let n = ta.len();
         let mut new_tab:Vec<Vec<char>> = vec![vec![' ';n];n];
         
-        for y in 0..n
+        for (y, item) in new_tab.iter_mut().enumerate().take(n)
         {
-            for x in 0..n {
+            for (x, item2) in item.iter_mut().enumerate().take(n) {
                 let r = Tile::rot90(n,x,y);
-                new_tab[y][x] = ta[r.1][r.0];
+                *item2 = ta[r.1][r.0];
             }
         }
         *ta = new_tab.clone();        
@@ -125,7 +126,7 @@ impl Tile
         self.d = 0;
         self.h = 0;
 
-        if self.tab.len()>0
+        if !self.tab.is_empty()
         {
             for i in 0..10
             {
@@ -144,24 +145,17 @@ impl Tile
     }
 }
 
-fn tile_matches(sol:&Vec<Vec<Tile>>,x:usize,y:usize,t:&Tile)->bool 
+fn tile_matches(sol:&[Vec<Tile>],x:usize,y:usize,t:&Tile)->bool 
 {
-    if x>0 {  
-        if sol[y  ][x-1].r!=0 && sol[y  ][x-1].r!=t.l { return false; }
-    }
-    if y>0 {  
-        if sol[y-1][x  ].d!=0 && sol[y-1][x  ].d!=t.u { return false; }
-    }
-    if x<sol.len()-1 {  
-        if sol[y  ][x+1].l!=0 && sol[y  ][x+1].l!=t.r { return false; }
-    }
-    if y<sol.len()-1 {  
-        if sol[y+1][x  ].u!=0 && sol[y+1][x  ].u!=t.d { return false; }
-    }
+    if x>0           && sol[y  ][x-1].r!=0 && sol[y  ][x-1].r!=t.l { return false; }
+    if y>0           && sol[y-1][x  ].d!=0 && sol[y-1][x  ].d!=t.u { return false; }
+    if x<sol.len()-1 && sol[y  ][x+1].l!=0 && sol[y  ][x+1].l!=t.r { return false; }
+    if y<sol.len()-1 && sol[y+1][x  ].u!=0 && sol[y+1][x  ].u!=t.d { return false; }
+
     true
 }
 
-fn try_solve(mut sol:&mut Vec<Vec<Tile>>,mut used:&mut HashSet<usize>,tiles:&Vec<Tile>,tile_i:usize,pos:usize,n:usize)->i64
+fn try_solve(sol:&mut Vec<Vec<Tile>>,used:&mut HashSet<usize>,tiles:&[Tile],tile_i:usize,pos:usize,n:usize)->i64
 {
     if pos==n*n {
         return sol[  0][  0].id as i64 * 
@@ -177,7 +171,7 @@ fn try_solve(mut sol:&mut Vec<Vec<Tile>>,mut used:&mut HashSet<usize>,tiles:&Vec
     let x = pos%n;
     let y = pos/n;
 
-    if used.get(&id)==None && tile_matches(&mut sol,x,y,&tiles[tile_i]) {
+    if used.get(&id)==None && tile_matches(sol,x,y,&tiles[tile_i]) {
 
         used.insert(id);
         let org_tile = sol[y][x].clone();
@@ -185,7 +179,7 @@ fn try_solve(mut sol:&mut Vec<Vec<Tile>>,mut used:&mut HashSet<usize>,tiles:&Vec
 
         for tile_i in 0..tiles.len()
         {
-            let r=  try_solve(&mut sol,&mut used,tiles,tile_i,pos+1,n);
+            let r=  try_solve(sol,used,tiles,tile_i,pos+1,n);
             if r>0 { return r; }
         }
 
@@ -196,13 +190,13 @@ fn try_solve(mut sol:&mut Vec<Vec<Tile>>,mut used:&mut HashSet<usize>,tiles:&Vec
     0
 }
 
-fn is_snake(picture:&Vec<Vec<char>>,snake:&Vec<String>,xx:usize,yy:usize)->bool
+fn is_snake(picture:&[Vec<char>],snake:&[String],xx:usize,yy:usize)->bool
 {
     for y in 0..snake.len() {
         for x in 0..snake[y].len() {
-            if snake[y].chars().nth(x).unwrap()=='#'
-            {
-                if picture[yy+y][xx+x]!='#' { return false; }
+            if snake[y].chars().nth(x).unwrap()=='#' && picture[yy+y][xx+x]!='#' 
+            { 
+                return false; 
             }
         }
     }
@@ -219,7 +213,7 @@ fn get_snake()->Vec<String>
     ]
 }
 
-fn find_snakes(picture:&Vec<Vec<char>>)->Vec<(usize,usize)>
+fn find_snakes(picture:&[Vec<char>])->Vec<(usize,usize)>
 {
     let mut res:Vec<(usize,usize)> = vec![];
     let snake = get_snake();
@@ -228,7 +222,7 @@ fn find_snakes(picture:&Vec<Vec<char>>)->Vec<(usize,usize)>
     {
         for xx in 0..picture[yy].len()-snake[0].len()
         {
-            if is_snake(&picture,&snake,xx,yy)
+            if is_snake(picture,&snake,xx,yy)
             {
                 res.push((xx,yy));
             }
@@ -237,9 +231,9 @@ fn find_snakes(picture:&Vec<Vec<char>>)->Vec<(usize,usize)>
     res
 }
 
-fn count_non_snakes(picture:&Vec<Vec<char>>,positions:&Vec<(usize,usize)>)->i32
+fn count_non_snakes(picture:&[Vec<char>],positions:&[(usize,usize)])->i32
 {
-    let mut picture = picture.clone();
+    let mut picture = picture.to_owned();
     let snake = get_snake();
 
     for &pos in positions
@@ -260,7 +254,7 @@ fn count_snakes(picture:Vec<Vec<char>>)->i32
 {
     let mut picture_o = picture.clone();
     let mut picture_x = picture.clone();
-    let mut picture_y = picture.clone();
+    let mut picture_y = picture;
 
     Tile::flip_x_s(&mut picture_x);
     Tile::flip_y_s(&mut picture_y);
@@ -268,7 +262,7 @@ fn count_snakes(picture:Vec<Vec<char>>)->i32
     for _ in 0..4
     {
         let s = find_snakes(&picture_o);            
-        if s.len()>0 { 
+        if !s.is_empty() { 
             return count_non_snakes(&picture_o,&s);
         }
         Tile::rotate_s(&mut picture_o);
@@ -277,7 +271,7 @@ fn count_snakes(picture:Vec<Vec<char>>)->i32
     for _ in 0..4
     {
         let s = find_snakes(&picture_x);            
-        if s.len()>0 { 
+        if !s.is_empty() { 
             return count_non_snakes(&picture_x,&s);
         }
         Tile::rotate_s(&mut picture_x);            
@@ -286,7 +280,7 @@ fn count_snakes(picture:Vec<Vec<char>>)->i32
     for _ in 0..4
     {
         let s = find_snakes(&picture_y);            
-        if s.len()>0 { 
+        if !s.is_empty() { 
             return count_non_snakes(&picture_y,&s);
         }
         Tile::rotate_s(&mut picture_y);
@@ -294,7 +288,7 @@ fn count_snakes(picture:Vec<Vec<char>>)->i32
     -1
 }
 
-pub fn solve1(data:&Vec<String>)->(i64,i64)
+pub fn solve1(data:&[String])->(i64,i64)
 {
     let mut id=0;
     let mut tab:Vec<String> = vec![];
@@ -304,11 +298,11 @@ pub fn solve1(data:&Vec<String>)->(i64,i64)
     {
         if line.find("Tile ")!=None
         {
-            let v:Vec<_> = line.split(" ").collect();
-            let v2:Vec<_> = v[1].split(":").collect();
+            let v:Vec<_>  = line.split(' ').collect();
+            let v2:Vec<_> = v[1].split(':').collect();
             id = v2[0].parse().unwrap();
         }
-        else if line.len()==0
+        else if line.is_empty()
         {
             tiles.push(Tile::new(id,&tab));
             tab.clear();
@@ -414,7 +408,7 @@ pub fn solve1(data:&Vec<String>)->(i64,i64)
 
     //println!("tiles mix:{}",tiles.len());
     let mut vs:Vec<_>=tiles.iter().enumerate().map(|(pos,t)|(t.h as i32,pos)).collect();
-    vs.sort();
+    vs.sort_unstable();
 
     let mut final_tiles = vec![];
     let mut last_hash=-1;
@@ -428,7 +422,7 @@ pub fn solve1(data:&Vec<String>)->(i64,i64)
 
     //println!("final mix2:{:?}",final_tiles.len());
 
-    let mut sol = vec![vec![Tile::new(0, &vec![]);n];n];
+    let mut sol = vec![vec![Tile::new(0, &[]);n];n];
     let mut used:HashSet<usize> = HashSet::new();
     
     for tile_i in 0..final_tiles.len()
@@ -439,16 +433,17 @@ pub fn solve1(data:&Vec<String>)->(i64,i64)
         {
             let mut picture:Vec<Vec<char>> = vec![];
 
-            for yy in 0..n {
-                
+            for item in sol.iter().take(n) 
+            {                
                 for yp in 0..8
                 {
                     let mut line:Vec<char> = vec![];
-                    for xx in 0..n 
+                    
+                    for item2 in item.iter().take(n)
                     {
                         for xp in 0..8
                         {
-                            line.push(sol[yy][xx].tab[yp+1][xp+1]);
+                            line.push(item2.tab[yp+1][xp+1]);
                         }
                     }               
                     picture.push(line.clone());
@@ -464,7 +459,7 @@ pub fn solve1(data:&Vec<String>)->(i64,i64)
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let res = solve1(data);
 

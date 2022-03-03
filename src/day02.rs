@@ -1,14 +1,14 @@
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let mut part1 = 0;
     let mut part2 = 0;
     
     for s in data {
             let tab    : Vec<_> =        s.split(": ").collect(); 
-            let v      : Vec<_> =   tab[0].split(" ").collect();        
-            let letter : char   =     v[1].chars().nth(0).unwrap();
-            let min_c  : Vec<_> =     v[0].split("-").collect();
+            let v      : Vec<_> =   tab[0].split(' ').collect();        
+            let letter : char   =     v[1].chars().next().unwrap();
+            let min_c  : Vec<_> =     v[0].split('-').collect();
             let min_v  : usize  = min_c[0].parse().unwrap();
             let max_v  : usize  = min_c[1].parse().unwrap();
     

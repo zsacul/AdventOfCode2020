@@ -1,4 +1,4 @@
-fn any_sum(data:&Vec<i64>,f:usize,t:usize,v:i64)->bool
+fn any_sum(data:&[i64],f:usize,t:usize,v:i64)->bool
 {
     for i in f..t
     {
@@ -10,7 +10,7 @@ fn any_sum(data:&Vec<i64>,f:usize,t:usize,v:i64)->bool
     false
 }
 
-fn find_span_sum(data:&Vec<i64>,v:i64)->i64
+fn find_span_sum(data:&[i64],v:i64)->i64
 {
     for i in 0..data.len() {
         for j in i+1..data.len() {
@@ -28,7 +28,7 @@ fn find_span_sum(data:&Vec<i64>,v:i64)->i64
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<i64>,preambles :usize)->(i64,i64)
+pub fn solve(data:&[i64],preambles :usize)->(i64,i64)
 {
     let mut res = (0,0);    
 

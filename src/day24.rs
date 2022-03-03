@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-fn get_dir(data:&String,i:&mut usize)->(i32,i32)
+fn get_dir(data:&str,i:&mut usize)->(i32,i32)
 {    
     let dir = &[data.chars().nth(*i).unwrap().to_string(),
                      data.chars().nth(*i+1).unwrap_or(' ').to_string()].join("")[..];
@@ -16,7 +16,7 @@ fn get_dir(data:&String,i:&mut usize)->(i32,i32)
         "w " =>          (-1, 0),
         _ => 
         { 
-            match dir.chars().nth(0).unwrap()
+            match dir.chars().next().unwrap()
             {
                 'e' => ( 1, 0),
                 'w' => (-1, 0),
@@ -26,7 +26,7 @@ fn get_dir(data:&String,i:&mut usize)->(i32,i32)
     }        
 }
 
-pub fn solve1(data:&Vec<String>,tiles :&mut HashMap<(i32,i32),bool>)
+pub fn solve1(data:&[String],tiles :&mut HashMap<(i32,i32),bool>)
 {
     for line in data
     {        
@@ -69,14 +69,11 @@ fn simulate(prev:&HashMap<(i32,i32),bool>,next:&mut HashMap<(i32,i32),bool>)
             let count = count(prev,newp.0,newp.1);
             next.insert(newp, true);
             
-            if *prev.get(&newp).unwrap_or(&true)==true
+            if *prev.get(&newp).unwrap_or(&true)
             {
                 if count==2             { next.insert(newp, false); }
             }
-                else
-            {
-                if count==1 || count==2 { next.insert(newp, false); }
-            }
+            else if count==1 || count==2 { next.insert(newp, false); }            
         }
     }
 }
@@ -88,14 +85,14 @@ pub fn solve2(tiles :&mut HashMap<(i32,i32),bool>)->i64
     for _ in 1..=100
     {
         simulate(&next.clone(),&mut next);        
-        next = next.into_iter().filter(|x| x.1==false).collect();
+        next = next.into_iter().filter(|x| !x.1).collect();
     }    
 
     next.len() as i64  
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let mut tiles : HashMap<(i32,i32),bool> = HashMap::new();
     solve1(data,&mut tiles);

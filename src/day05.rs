@@ -10,7 +10,7 @@ fn get_val(s:&str,one:char)->i32
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let mut res = (0,0);
     let mut seats = vec![];
@@ -22,7 +22,7 @@ pub fn solve(data:&Vec<String>)->(i32,i32)
         if number>res.0 { res.0 = number; }
     }
 
-    seats.sort();
+    seats.sort_unstable();
 
     for v in *seats.first().unwrap()..*seats.last().unwrap()
     {

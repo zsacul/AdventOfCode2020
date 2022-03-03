@@ -1,10 +1,10 @@
-fn eval_pure(l:&String)->i64
+fn eval_pure(l:&str)->i64
 {
     let mut acc=0;
     let mut num:i64=0;
     let mut operator : Option<char> = None;
-    let mut line = l.clone();
-    line.push_str(" ");
+    let mut line = l.to_string();
+    line.push(' ');
 
     for c in line.chars() {
         match c 
@@ -44,7 +44,7 @@ fn eval_pure(l:&String)->i64
     acc
 }
 
-fn find_pos(l:&String,pos:i32,delta:i32)->i32
+fn find_pos(l:&str,pos:i32,delta:i32)->i32
 {
     let mut p = pos;
     loop 
@@ -55,12 +55,12 @@ fn find_pos(l:&String,pos:i32,delta:i32)->i32
     }
 }
 
-fn eval(l:&String,part1:bool)->i64
+fn eval(l:&str,part1:bool)->i64
 {
-    let mut line = (*l).clone();
+    let mut line = l.to_string();//(*l).clone();
 
     //eval and replace all equations in brackets first
-    while line.find("(")!=None
+    while line.find('(')!=None
     {
         let bracket_start = line.find('(').unwrap();
         let mut bracket_end = 0;
@@ -91,10 +91,10 @@ fn eval(l:&String,part1:bool)->i64
     if !part1
     {
         //eval and replace all + operators first
-        while line.find("+")!=None
+        while line.find('+')!=None
         {
-            let l_pos = find_pos(&line,line.find("+").unwrap() as i32-2,-1);
-            let r_pos = find_pos(&line,line.find("+").unwrap() as i32+2, 1);
+            let l_pos = find_pos(&line,line.find('+').unwrap() as i32-2,-1);
+            let r_pos = find_pos(&line,line.find('+').unwrap() as i32+2, 1);
 
             let mut ns = "".to_string();
 
@@ -102,9 +102,9 @@ fn eval(l:&String,part1:bool)->i64
                 ns.push_str(&line[..l_pos as usize].to_string());
             }
 
-                ns.push_str(" ");
+                ns.push(' ');
                 ns.push_str(&eval_pure(&line[(l_pos+1) as usize..r_pos as usize].to_string()).to_string()[..]);
-                ns.push_str(" ");
+                ns.push(' ');
 
             if r_pos+1<line.len() as i32 {
                 ns.push_str(&line[(r_pos+1) as usize..].to_string());
@@ -117,18 +117,18 @@ fn eval(l:&String,part1:bool)->i64
     eval_pure(&line)
 }
 
-pub fn solve1(data:&Vec<String>)->i64
+pub fn solve1(data:&[String])->i64
 {
     data.iter().map(|l| eval(l,true)).sum()
 }
 
-pub fn solve2(data:&Vec<String>)->i64
+pub fn solve2(data:&[String])->i64
 {
     data.iter().map(|l| eval(l,false)).sum()
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let res = (solve1(data),solve2(data));
 

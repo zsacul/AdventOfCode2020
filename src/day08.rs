@@ -30,11 +30,9 @@ fn execute(code : &mut Vec<Instructions>,part1:bool)->Option<i32> {
     {
         Some(old_acc)
     }
-    else
-    {        
-        if line>=code.len() as i32 { Some(acc) }
-                              else { None      }
-    }    
+    else if line>=code.len() as i32 { Some(acc) }
+                               else { None      }
+
 }
 
 fn fuzz(code :&mut Vec<Instructions>)->i32
@@ -57,13 +55,13 @@ fn fuzz(code :&mut Vec<Instructions>)->i32
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let mut res = (0,0);    
     let mut code : Vec<Instructions> = vec![]; 
 
     for line in data {
-        let v   : Vec<_> = line.split(" ").collect();
+        let v   : Vec<_> = line.split(' ').collect();
         let val : i32    = v[1].parse().unwrap();        
 
         match v[0] {

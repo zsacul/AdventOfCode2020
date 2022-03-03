@@ -22,12 +22,12 @@ fn pass(code:&str,val:&str)->bool
     let vali = scan_n(val);
 
     match code {
-        "byr" =>  vali>=1920 && vali<=2002,
-        "iyr" =>  vali>=2010 && vali<=2020,
-        "eyr" =>  vali>=2020 && vali<=2030,
+        "byr" => (1920..=2002).contains(&vali),
+        "iyr" => (2010..=2020).contains(&vali),
+        "eyr" => (2020..=2030).contains(&vali),
         "hgt" => (val.len()==5 && val.contains("cm") && number_of_digits(val)==3 && vali>=150 && vali<=193) ||
                  (val.len()==4 && val.contains("in") && number_of_digits(val)==2 && vali>= 59 && vali<= 76),
-        "hcl" =>  val.len()==7 && val.chars().nth(0).unwrap()=='#' && number_of_hex(&val[1..])==6,        
+        "hcl" =>  val.len()==7 && val.starts_with('#') && number_of_hex(&val[1..])==6,        
         "ecl" =>  val=="amb" || val=="blu" || val=="brn" || val=="gry" || val=="grn" || val=="hzl" || val=="oth",
         "pid" =>  number_of_digits(val)==9,
         "cid" =>  true,
@@ -35,7 +35,7 @@ fn pass(code:&str,val:&str)->bool
     }
 }
 
-fn is_valid(v:&Vec<&str>)->(i32,i32) {
+fn is_valid(v:&[&str])->(i32,i32) {
 
     let req = vec!["byr",
                             "iyr",
@@ -52,7 +52,7 @@ fn is_valid(v:&Vec<&str>)->(i32,i32) {
     let mut p2_ok = true;
 
     for p in v {
-        let s:Vec<_> = p.split(":").collect();
+        let s:Vec<_> = p.split(':').collect();
         let code = s[0];
 
         if !h.contains(p) 
@@ -61,10 +61,7 @@ fn is_valid(v:&Vec<&str>)->(i32,i32) {
             { 
                 p2_ok = false;
             }
-              else
-            {
-                if req.contains(&code) { r2+=1; }
-            }
+            else if req.contains(&code) { r2+=1; }            
 
             if req.contains(&code) { r1+=1; }
             h.insert(code);
@@ -77,15 +74,15 @@ fn is_valid(v:&Vec<&str>)->(i32,i32) {
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let mut res = (0,0);
     let mut acc = "".to_string();
 
     for line in data
     {
-        if line.len()==0 {
-            let v: Vec<_> = acc.split(" ").collect();
+        if line.is_empty() {
+            let v: Vec<_> = acc.split(' ').collect();
             let r = is_valid(&v); 
             res.0+=r.0;
             res.1+=r.1;
@@ -94,15 +91,15 @@ pub fn solve(data:&Vec<String>)->(i32,i32)
         }
         else
         {
-            acc.push_str(" ");
+            acc.push(' ');
             acc.push_str(line);
         }
 
     }
 
-    if acc.len()!=0
+    if !acc.is_empty()
     {
-        let v: Vec<_> = acc.split(" ").collect();        
+        let v: Vec<_> = acc.split(' ').collect();        
         let r = is_valid(&v); 
         res.0+=r.0;
         res.1+=r.1;

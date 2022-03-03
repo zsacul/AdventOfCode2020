@@ -7,12 +7,9 @@ fn count3d(hash:&HashMap<(i32,i32,i32),bool>,x:i32,y:i32,z:i32)->i32
     for zz in -1..=1 {
     for yy in -1..=1 {
     for xx in -1..=1 {
-        if xx!=0 || yy!=0 || zz!=0 
+        if (xx!=0 || yy!=0 || zz!=0) && *hash.get(&(x+xx,y+yy,z+zz)).unwrap_or(&false)
         {
-            if *hash.get(&(x+xx,y+yy,z+zz)).unwrap_or(&false)
-            {
-                cnt+=1;
-            }
+            cnt+=1;
         }
     }}}
 
@@ -34,10 +31,7 @@ fn simulate3d(prev:&HashMap<(i32,i32,i32),bool>,next:&mut HashMap<(i32,i32,i32),
             {
                 if c==2 || c==3 { next.insert(newp, true);  }                                  
             }
-                else
-            {
-                if c==3 { next.insert(newp, true); }
-            }
+            else if c==3 { next.insert(newp, true); }
         }}}
     }
 }
@@ -50,12 +44,9 @@ fn count4d(hash:&HashMap<(i32,i32,i32,i32),bool>,x:i32,y:i32,z:i32,w:i32)->i32
     for zz in -1..=1 {
     for yy in -1..=1 {
     for xx in -1..=1 {
-        if xx!=0 || yy!=0 || zz!=0 || ww!=0
+        if (xx!=0 || yy!=0 || zz!=0 || ww!=0) && *hash.get(&(x+xx,y+yy,z+zz,w+ww)).unwrap_or(&false)
         {
-            if *hash.get(&(x+xx,y+yy,z+zz,w+ww)).unwrap_or(&false)
-            {
-                cnt+=1;
-            }
+            cnt+=1;
         }
     }}}}
 
@@ -79,15 +70,12 @@ fn simulate4d(prev:&HashMap<(i32,i32,i32,i32),bool>,next:&mut HashMap<(i32,i32,i
             {
                 if c==2 || c==3 { next.insert(newp, true);  }                                  
             }
-              else
-            {
-                if c==3 { next.insert(newp, true); }
-            }
+            else if c==3 { next.insert(newp, true); }            
         }}}}
     }
 }
 
-pub fn solve1(data:&Vec<String>)->i32
+pub fn solve1(data:&[String])->i32
 {
     let mut next:HashMap<(i32,i32,i32),bool> = HashMap::new();
 
@@ -100,13 +88,13 @@ pub fn solve1(data:&Vec<String>)->i32
     for _ in 0..6
     {
         simulate3d(&next.clone(),&mut next);        
-        next = next.into_iter().filter(|x| x.1==true).collect();
+        next = next.into_iter().filter(|x| x.1).collect();
     }    
 
     next.len() as i32
 }
 
-pub fn solve2(data:&Vec<String>)->i32
+pub fn solve2(data:&[String])->i32
 {
     let mut next:HashMap<(i32,i32,i32,i32),bool> = HashMap::new();
    
@@ -119,14 +107,14 @@ pub fn solve2(data:&Vec<String>)->i32
     for _ in 0..6
     {
         simulate4d(&next.clone(),&mut next);    
-        next = next.into_iter().filter(|x| x.1==true).collect();
+        next = next.into_iter().filter(|x| x.1).collect();
     }
 
     next.len() as i32 
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let res = (solve1(data),solve2(data));
 

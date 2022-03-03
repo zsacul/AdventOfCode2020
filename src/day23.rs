@@ -1,7 +1,7 @@
 use super::cycliclist::{CyclicList};
 use std::io::{self, Write};
 
-pub fn solve1(data:&Vec<String>,moves:usize)->String
+pub fn solve1(data:&[String],moves:usize)->String
 {
     let mut table = CyclicList::new();
     let mut max_label = 0;
@@ -63,7 +63,7 @@ pub fn solve1(data:&Vec<String>,moves:usize)->String
 }
 
 
-pub fn solve2(data:&Vec<String>,moves:usize)->i64
+pub fn solve2(data:&[String],moves:usize)->i64
 {
     let mut table = CyclicList::new();
     let mut max_label = 0;
@@ -125,7 +125,7 @@ pub fn solve2(data:&Vec<String>,moves:usize)->i64
     pos1*pos2
 }
 
-pub fn solve(data:&Vec<String>)->(String,i64)
+pub fn solve(data:&[String])->(String,i64)
 {
     let res = (solve1(data,100),solve2(data,10_000_000));
 

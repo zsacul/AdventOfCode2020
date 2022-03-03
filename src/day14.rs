@@ -19,7 +19,7 @@ fn get_masks(s:&str)->(u64,u64,u64,u64)
     (mask0,mask1,maskf,number_x)
 }
 
-fn vector_to_binary(table:&Vec<u8>)->u64
+fn vector_to_binary(table:&[u8])->u64
 {
     table.iter().rev().fold(0,|acc,&x| ((acc<<1) | x as u64))
 }
@@ -49,16 +49,16 @@ fn get_mask01(i:u64,mask_x:u64)->u64
     vector_to_binary(&tab0)
 }
 
-fn parse_val_adr(tab:&Vec<&str>)->(u64,u64)
+fn parse_val_adr(tab:&[&str])->(u64,u64)
 {
     let val:u64    = tab[1].parse().unwrap();
-    let add1 = tab[0].find("[").unwrap();
-    let add2 = tab[0].find("]").unwrap();
+    let add1 = tab[0].find('[').unwrap();
+    let add2 = tab[0].find(']').unwrap();
     let addr:u64   = tab[0][add1+1..add2].parse().unwrap();
     (val,addr)
 }
 
-fn solve1(data:&Vec<String>)->u64
+fn solve1(data:&[String])->u64
 {
     let mut mask_0 : u64 = 0;
     let mut mask_1 : u64 = 0;
@@ -89,7 +89,7 @@ fn solve1(data:&Vec<String>)->u64
 }
 
 
-fn solve2(data:&Vec<String>)->u64
+fn solve2(data:&[String])->u64
 {
     let mut mask_1 : u64 = 0;
     let mut mask_x : u64 = 0;
@@ -127,9 +127,9 @@ fn solve2(data:&Vec<String>)->u64
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(u64,u64)
+pub fn solve(data:&[String])->(u64,u64)
 {
-    let res = (solve1(&data),solve2(&data));
+    let res = (solve1(data),solve2(data));
 
     println!("Day14");
     println!("part1:{}",res.0);

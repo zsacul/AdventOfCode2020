@@ -16,8 +16,8 @@ impl Pair
     {
         let left_right:Vec<_> = s.split(": ").collect();
         let ss: Vec<_> = left_right[1].split(" or ").collect();
-        let v1: Vec<_> = ss[0].split("-").collect();
-        let v2: Vec<_> = ss[1].split("-").collect();
+        let v1: Vec<_> = ss[0].split('-').collect();
+        let v2: Vec<_> = ss[1].split('-').collect();
         let name = left_right[0].to_string();
         let a:i32 = v1[0].parse().unwrap();
         let b:i32 = v1[1].parse().unwrap();
@@ -39,7 +39,7 @@ impl Pair
     }
 }
 
-fn invalid(i:i32,limits:&Vec<Pair>)->bool
+fn invalid(i:i32,limits:&[Pair])->bool
 {
     for l in limits {
         if l.in_range(i) { return false; }
@@ -64,7 +64,7 @@ fn get_elem(hash:&HashMap <String,usize>,key:&str)->usize
     }
 }
 
-fn solve12(data:&Vec<String>)->(i64,i64)
+fn solve12(data:&[String])->(i64,i64)
 {
     let mut limits = vec![];
     let mut valid = vec![];
@@ -74,10 +74,10 @@ fn solve12(data:&Vec<String>)->(i64,i64)
     let mut res1:i64 =0;
 
     for line in data {
-        if line.len()==0 { continue; }
+        if line.is_empty() { continue; }
 
         if scan {
-            let l:Vec<_> = line.split(",").collect();
+            let l:Vec<_> = line.split(',').collect();
             let ticket:Vec<_> = l.iter().map(|&x|x.parse::<i32>().unwrap()).collect();
             let mut v=0;
 
@@ -96,7 +96,7 @@ fn solve12(data:&Vec<String>)->(i64,i64)
         }
         else if your {
             your = false;
-            your_ticket = line.split(",").map(|x|x.parse::<i32>().unwrap()).collect();
+            your_ticket = line.split(',').map(|x|x.parse::<i32>().unwrap()).collect();
             valid.push(your_ticket.clone());
         }
         else if line.find("your ticket:")!=None
@@ -121,8 +121,8 @@ fn solve12(data:&Vec<String>)->(i64,i64)
         for l in limits.clone()
         {
             let mut c=0;
-            for y in 0..valid.len() {
-                if l.in_range(valid[y][x]) { c+=1; }
+            for y in valid.iter() {
+                if l.in_range(y[x]) { c+=1; }
             }
 
             if c==valid.len() {
@@ -137,7 +137,7 @@ fn solve12(data:&Vec<String>)->(i64,i64)
 
     for (_,has) in used.iter().enumerate()
     {
-        if has.1.len()>=1
+        if !has.1.is_empty()
         {
             for s in has.1.iter() {
                 if !name_used.contains(s) {
@@ -167,7 +167,7 @@ fn solve12(data:&Vec<String>)->(i64,i64)
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let res = (solve12(data));
 

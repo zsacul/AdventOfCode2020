@@ -7,13 +7,13 @@ use std::path::Path;
 pub fn read_1d_i32(path:&str)->Vec<i32>
 {
     let mut res:Vec<i32> = vec![];
-    if let Ok(lines) = read_lines(path) {
-        for line in lines {
-            if let Ok(ip) = line {
-                res.push(ip.parse::<i32>().unwrap());
-            }
-        }
+    let lines = read_lines(path).unwrap();
+
+    for ip in lines.flatten() 
+    {
+        res.push(ip.parse::<i32>().unwrap());
     }
+
     res
 }
 
@@ -21,13 +21,13 @@ pub fn read_1d_i32(path:&str)->Vec<i32>
 pub fn read_1d_i64(path:&str)->Vec<i64>
 {
     let mut res:Vec<i64> = vec![];
-    if let Ok(lines) = read_lines(path) {
-        for line in lines {
-            if let Ok(ip) = line {
-                res.push(ip.parse::<i64>().unwrap());
-            }
-        }
+    let lines = read_lines(path).unwrap();
+    
+    for ip in lines.flatten() 
+    {
+        res.push(ip.parse::<i64>().unwrap());
     }
+    
     res
 }
 
@@ -36,13 +36,12 @@ pub fn read_1d_i64(path:&str)->Vec<i64>
 pub fn read_1d_string(path:&str)->Vec<String>
 {
     let mut res:Vec<String> = vec![];
-    if let Ok(lines) = read_lines(path) {
-        for line in lines {
-            if let Ok(ip) = line {
-                res.push(ip);
-            }
-        }
+    let lines = read_lines(path).unwrap();
+    for ip in lines.flatten() 
+    {        
+        res.push(ip);        
     }
+
     res
 }
 

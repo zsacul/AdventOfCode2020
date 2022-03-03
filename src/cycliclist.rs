@@ -122,7 +122,7 @@ impl CyclicList
         let mut new_elem = Node::new(elem);
         let next_id = CyclicList::next_id();
 
-        if self.data.len()!=0
+        if !self.data.is_empty()
         {
             if self.data.get(&self.head).unwrap().next!=self.head
             {

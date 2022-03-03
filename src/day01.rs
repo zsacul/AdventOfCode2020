@@ -1,4 +1,4 @@
-pub fn part1(data:&Vec<i32>)->i32
+pub fn part1(data:&[i32])->i32
 {
     for i in 0..data.len() {
         for j in i..data.len() {
@@ -11,7 +11,7 @@ pub fn part1(data:&Vec<i32>)->i32
     -1
 }
 
-pub fn part2(data:&Vec<i32>)->i32
+pub fn part2(data:&[i32])->i32
 {
     for i in 0..data.len() {
         for j in i..data.len() {
@@ -27,7 +27,7 @@ pub fn part2(data:&Vec<i32>)->i32
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<i32>)
+pub fn solve(data:&[i32])
 {    
     println!("Day1");
     println!("part1:{}",part1(data));

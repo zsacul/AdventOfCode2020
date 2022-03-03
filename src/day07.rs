@@ -22,14 +22,14 @@ impl Bag{
         self.color = v[0].to_string();
         let bags: Vec<_> = v[1].split(", ").collect();
 
-        if bags.len()>0 
+        if !bags.is_empty()
         {
             for b in bags {
-                let nums  : Vec<_> = b.split(" ").collect();            
+                let nums  : Vec<_> = b.split(' ').collect();            
                 let count : usize  = nums[0].parse().unwrap_or(0);
     
-                let n    = b[1+b.find(" ").unwrap()..].to_string();
-                let name = n.to_string().replace(".", "").replace(" bags", "").replace(" bag", "");
+                let n    = b[1+b.find(' ').unwrap()..].to_string();
+                let name = n.to_string().replace('.', "").replace(" bags", "").replace(" bag", "");
                 self.contain.insert(name,count);
             }
         }
@@ -47,7 +47,7 @@ fn contain_gold(bags:&HashMap<String,Bag>,b:&Bag)->bool
 
     let mut res = false;
     
-    for (key,_) in &b.contain 
+    for key in b.contain.keys()
     {
         if bags.contains_key(key)
         {
@@ -72,7 +72,7 @@ fn count_cost(bags:&HashMap<String,Bag>,b:&Bag)->usize {
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(usize,usize)
+pub fn solve(data:&[String])->(usize,usize)
 {
     let mut res = (0,0);
     let mut bags:HashMap<String,Bag> = HashMap::new();

@@ -13,7 +13,7 @@ fn rot90angle(x:&mut i32,y:&mut i32,angle:i32)
     *y = po.1;
 }
 
-fn solve1(data:&Vec<String>)->i32
+fn solve1(data:&[String])->i32
 {
     let dirs = [(0,1),(1,0),(0,-1),(-1,0)];
     let mut x = 0;
@@ -22,7 +22,7 @@ fn solve1(data:&Vec<String>)->i32
 
     for l in data
     {
-        let letter = l.chars().nth(0).unwrap();
+        let letter = l.chars().next().unwrap();
         let num = l[1..].parse::<i32>().unwrap();
 
         match letter
@@ -45,7 +45,7 @@ fn solve1(data:&Vec<String>)->i32
     x.abs() + y.abs()
 }
 
-fn solve2(data:&Vec<String>)->i32
+fn solve2(data:&[String])->i32
 {
     let mut x  = 0;
     let mut y  = 0;
@@ -54,7 +54,7 @@ fn solve2(data:&Vec<String>)->i32
 
     for l in data
     {
-        let letter = l.chars().nth(0).unwrap();
+        let letter = l.chars().next().unwrap();
         let num     = l[1..].parse::<i32>().unwrap();
 
         match letter
@@ -78,7 +78,7 @@ fn solve2(data:&Vec<String>)->i32
 
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
     let res : (i32,i32) = (solve1(data),solve2(data));
     

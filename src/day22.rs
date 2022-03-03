@@ -1,23 +1,23 @@
 use std::collections::HashSet;
 
-fn compute_score(tab:&Vec<u8>)->i64
+fn compute_score(tab:&[u8])->i64
 {
     tab.iter().enumerate().map(|(id,&x)| (tab.len() as i64-id as i64)*x as i64).sum()
 }
 
-fn sub_game(id:i32,p1:&Vec<u8>,p2:&Vec<u8>)->(bool,i64)
+fn sub_game(id:i32,p1:&[u8],p2:&[u8])->(bool,i64)
 {
     let mut states: HashSet<Vec<u8>> = HashSet::new();
-    let mut pd1 = p1.clone();
-    let mut pd2 = p2.clone();
+    let mut pd1 = p1.to_owned();
+    let mut pd2 = p2.to_owned();
 
-    while pd1.len()>0 && pd2.len()>0 
+    while !pd1.is_empty() && !pd2.is_empty()
     {
         let hash = vec![pd1.clone(),vec![255u8],pd2.clone()].into_iter().flatten().collect::<Vec<u8>>();
 
         if states.get(&hash)!=None
         {
-            return (true,compute_score(&p1));
+            return (true,compute_score(p1));
         }
         states.insert(hash);
 
@@ -42,18 +42,18 @@ fn sub_game(id:i32,p1:&Vec<u8>,p2:&Vec<u8>)->(bool,i64)
         }
     }
 
-    let res = if pd1.len()>0 { compute_score(&pd1) }
-                            else { compute_score(&pd2) };    
+    let res = if !pd1.is_empty() { compute_score(&pd1) }
+                                else { compute_score(&pd2) };    
 
-    (pd1.len()>0,res)
+    (!pd1.is_empty(),res)
 }
 
-pub fn solve1(deck1:&Vec<u8>,deck2:&Vec<u8>)->i64
+pub fn solve1(deck1:&[u8],deck2:&[u8])->i64
 {    
-    let mut player1_deck = deck1.clone();
-    let mut player2_deck = deck2.clone();
+    let mut player1_deck = deck1.to_owned();
+    let mut player2_deck = deck2.to_owned();
     
-    while player1_deck.len()>0 && player2_deck.len()>0 
+    while !player1_deck.is_empty() && !player2_deck.is_empty()
     {
         let p1 = player1_deck.remove(0);
         let p2 = player2_deck.remove(0);
@@ -70,17 +70,17 @@ pub fn solve1(deck1:&Vec<u8>,deck2:&Vec<u8>)->i64
         }
     }
 
-    if player1_deck.len()>0 { compute_score(&player1_deck) }
-                       else { compute_score(&player2_deck) }   
+    if !player1_deck.is_empty() { compute_score(&player1_deck) }
+                           else { compute_score(&player2_deck) }   
 }
 
-pub fn solve2(deck1:&Vec<u8>,deck2:&Vec<u8>)->i64
+pub fn solve2(deck1:&[u8],deck2:&[u8])->i64
 {
     sub_game(1,deck1,deck2).1    
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let mut player1_deck = vec![];
     let mut player2_deck = vec![];
@@ -92,7 +92,7 @@ pub fn solve(data:&Vec<String>)->(i64,i64)
         {
             player1 = false;
         }
-        else if line.len()>0
+        else if !line.is_empty()
         {
             let num:u8 = line.parse().unwrap();
             if player1 { player1_deck.push(num); }

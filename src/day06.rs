@@ -12,7 +12,7 @@ pub fn count(s:String,cnt:usize)->(usize,usize)
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(usize,usize)
+pub fn solve(data:&[String])->(usize,usize)
 {
     let mut res = (0,0);
 
@@ -20,7 +20,7 @@ pub fn solve(data:&Vec<String>)->(usize,usize)
     let mut cnt=0;
 
     for line in data {
-        if line.len()==0 {
+        if line.is_empty() {
             let c = count(acc,cnt);
             acc="".to_string();
             res.0+=c.0;
@@ -34,7 +34,7 @@ pub fn solve(data:&Vec<String>)->(usize,usize)
         }
     }
 
-    if acc.len()>0 {
+    if !acc.is_empty() {
         let c = count(acc,cnt);
         res.0+=c.0;
         res.1+=c.1;

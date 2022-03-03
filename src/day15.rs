@@ -19,12 +19,12 @@ impl Pair
 
     fn add(&mut self,n:i32)
     {
-        if self.a==-1 { self.a = n; }
-        else
+        if self.a!=-1 
         {            
             self.b = self.a;
-            self.a = n;            
         }
+
+        self.a = n;            
     }
 
     fn diff(&self)->i32
@@ -40,7 +40,7 @@ impl Pair
     }
 }
 
-fn solve1(data:&Vec<i32>,rounds:usize)->i32
+fn solve1(data:&[i32],rounds:usize)->i32
 {
     let mut mem    : HashMap<i32,Pair> = HashMap::new();
     let mut spoken = 0;
@@ -67,9 +67,9 @@ fn solve1(data:&Vec<i32>,rounds:usize)->i32
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i32,i32)
+pub fn solve(data:&[String])->(i32,i32)
 {
-    let tab = data[0].split(",").map(|s| s.parse().unwrap()).collect::<Vec<i32>>();
+    let tab = data[0].split(',').map(|s| s.parse().unwrap()).collect::<Vec<i32>>();
     let res = (solve1(&tab,2020),
                          solve1(&tab,30000000));
 

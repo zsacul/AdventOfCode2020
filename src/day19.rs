@@ -8,13 +8,13 @@ struct Rule {
     a2:i32,
     b2:i32,
     c2:i32,
-    id:i32,
+    //id:i32,
     ch:Option<char>,
 }
 
 impl Rule
 {
-    fn new(s:String,id:i32)->Self
+    fn new(s:String)->Self
     {
         let mut a1=-1;
         let mut b1=-1;
@@ -24,25 +24,25 @@ impl Rule
         let mut c2=-1;        
         let mut ch = None;
 
-        if s.find("\"")!=None 
+        if s.find('"')!=None 
         { 
             ch = Some(s.chars().nth(1).unwrap()) 
         } 
           else 
         {
             let ss : Vec<_> = s.split(" | ").collect();
-            let ss1 : Vec<_> = ss[0].split(" ").collect();
+            let ss1 : Vec<_> = ss[0].split(' ').collect();
             
             //println!("ss:{:?}",ss);
-            if ss1.len()>=1 { a1 = ss1[0].to_string().parse::<i32>().unwrap(); }
+            if !ss1.is_empty() { a1 = ss1[0].to_string().parse::<i32>().unwrap(); }
             if ss1.len()>=2 { b1 = ss1[1].to_string().parse::<i32>().unwrap(); }
             if ss1.len()>=3 { c1 = ss1[2].to_string().parse::<i32>().unwrap(); }
             if ss1.len()>3 {panic!("tm {} \n{:?}",s,ss)};
 
             if ss.len()>1
             {
-                let ss2 : Vec<_> = ss[1].split(" ").collect();
-                if ss2.len()>=1 { a2 = ss2[0].to_string().parse::<i32>().unwrap(); }
+                let ss2 : Vec<_> = ss[1].split(' ').collect();
+                if !ss2.is_empty() { a2 = ss2[0].to_string().parse::<i32>().unwrap(); }
                 if ss2.len()>=2 { b2 = ss2[1].to_string().parse::<i32>().unwrap(); }
                 if ss2.len()>=3 { c2 = ss2[2].to_string().parse::<i32>().unwrap(); }
                 if ss2.len()>3 {panic!("tm {} \n{:?}",s,ss)};
@@ -50,7 +50,8 @@ impl Rule
         }
 
         Rule {
-            a1,b1,c1,a2,b2,c2,id,ch
+//            a1,b1,c1,a2,b2,c2,id,ch
+            a1,b1,c1,a2,b2,c2,ch
         }
     }
 
@@ -60,7 +61,7 @@ impl Rule
         println!("l:{:?} a1:{} b1:{} c1:{} a2:{} b2:{} c2:{}",self.ch,self.a1,self.b1,self.c1,self.a2,self.b2,self.c2);
     }
 
-    fn match_string(&self,hash:&HashMap<i32,Rule>,s:&String,i:usize)->(bool,usize)
+    fn match_string(&self,hash:&HashMap<i32,Rule>,s:&str,i:usize)->(bool,usize)
     {
         //print!("{},",self.id);
 
@@ -81,7 +82,7 @@ impl Rule
         {
             let m1 = hash.get(&self.a1).unwrap().match_string(hash, s, i);            
 
-            if m1.0==true { 
+            if m1.0 { 
                 
                 if self.b1==-1 
                 { 
@@ -90,7 +91,7 @@ impl Rule
                 if m1.1>=s.len() { return (false,i); }
               
                 let m2 = hash.get(&self.b1).unwrap().match_string(hash, s, m1.1);
-                if m2.0==true { 
+                if m2.0 { 
 
                     if self.c1==-1 
                     { 
@@ -99,7 +100,7 @@ impl Rule
                     //if m2.1>=s.len() { return (false,i); }
 
                     let m3 = hash.get(&self.c1).unwrap().match_string(hash, s, m2.1);
-                    if m3.0==true 
+                    if m3.0 
                     { 
                         return m3; 
                     }
@@ -112,7 +113,7 @@ impl Rule
         {
             let m1 = hash.get(&self.a2).unwrap().match_string(hash, s, i);            
 
-            if m1.0==true { 
+            if m1.0 { 
                 
                 if self.b2==-1 { 
                     return m1; 
@@ -120,7 +121,7 @@ impl Rule
                 if m1.1>=s.len() { return (false,i); }
               
                 let m2 = hash.get(&self.b2).unwrap().match_string(hash, s, m1.1);
-                if m2.0==true { 
+                if m2.0 { 
 
                     if self.c2==-1 { 
                         return m2; 
@@ -128,7 +129,7 @@ impl Rule
                     //if m2.1>=s.len() { return (false,i); }
 
                     let m3 = hash.get(&self.c2).unwrap().match_string(hash, s, m2.1);
-                    if m3.0==true { 
+                    if m3.0 { 
                         return m3; 
                     }
                 }
@@ -140,7 +141,7 @@ impl Rule
     }
 }
 
-pub fn solve12(data:&Vec<String>,part1:bool)->i64
+pub fn solve12(data:&[String],part1:bool)->i64
 {
     let mut res = 0;
     let mut rules = true;
@@ -148,35 +149,31 @@ pub fn solve12(data:&Vec<String>,part1:bool)->i64
     let mut hash:HashMap<i32,Rule> = HashMap::new();
 
     for l in data {
-        if l.len()==0
+        if l.is_empty()
         {
             rules = false;
 
             if !part1 {
-                hash.insert(8,Rule::new("42 | 42 8".to_string(),8));
-                hash.insert(11,Rule::new("42 31 | 42 11 31".to_string(),11));
+                hash.insert(8,Rule::new("42 | 42 8".to_string()));
+                hash.insert(11,Rule::new("42 31 | 42 11 31".to_string()));
             }           
         }
-        else
-        {
-            if rules {
-                if l.find(":")!=None {
-                    let v:Vec<_> = l.split(": ").collect();
-                    let id:i32 = v[0].parse().unwrap();
-                    hash.insert(id,Rule::new(v[1].to_string(),id));
-                }
-            }
-              else
-            {
-                let ll:String = l.chars().filter(|&c|c=='a' || c=='b').collect();
-                
-                if hash.get(&0).unwrap().match_string(&hash,&ll,0)==(true,ll.len())
-                {
-                    res+=1;
-                }
-            }
-        }
-
+        else if rules {
+                  if l.find(':')!=None {
+                      let v:Vec<_> = l.split(": ").collect();
+                      let id:i32 = v[0].parse().unwrap();
+                      hash.insert(id,Rule::new(v[1].to_string()));
+                  }
+              }
+                else
+              {
+                  let ll:String = l.chars().filter(|&c|c=='a' || c=='b').collect();
+                  
+                  if hash.get(&0).unwrap().match_string(&hash,&ll,0)==(true,ll.len())
+                  {
+                      res+=1;
+                  }
+              }
     }
 
     res
@@ -184,7 +181,7 @@ pub fn solve12(data:&Vec<String>,part1:bool)->i64
 
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(i64,i64)
+pub fn solve(data:&[String])->(i64,i64)
 {
     let res = (solve12(data,true),solve12(data,false));
 

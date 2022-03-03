@@ -14,7 +14,7 @@ fn find(val:usize,key:usize)->usize
     loop_count
 }
 
-pub fn solve1(data:&Vec<String>)->usize
+pub fn solve1(data:&[String])->usize
 {
     let door_public_key : usize = data[0].parse().unwrap();
     let card_public_key : usize = data[1].parse().unwrap();
@@ -30,7 +30,7 @@ pub fn solve1(data:&Vec<String>)->usize
 }
 
 #[allow(unused)]
-pub fn solve(data:&Vec<String>)->(usize,usize)
+pub fn solve(data:&[String])->(usize,usize)
 {
     let res = (solve1(data),0);
 
